@@ -21,6 +21,8 @@ export const deepgramTranscribe = async (url: string): Promise<any> => {
         summarize: 'v2',
       }
     )
+    if (error) return { data: error }
+
     console.dir(result, { depth: null })
     // get transcription and summary. getting confidence would be good later too if we wanted to throw some error if the confidence was low.
     return {
