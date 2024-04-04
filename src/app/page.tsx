@@ -16,7 +16,6 @@ export default function Home() {
     setLink(event.target.value)
   }
 
-
   async function handleTranscribe() {
     setIsLoading(true) // Start loading
     setErrorMessage('') // Reset error message
@@ -25,8 +24,6 @@ export default function Home() {
     const cachedData = localStorage.getItem(link)
 
     if (cachedData) {
-      // const parsedData = JSON.parse(cachedData)
-      // console.log('Retrieved cached data:', parsedData)
       const { transcription, summary } = JSON.parse(cachedData)
       setTranscription(transcription)
       setSummary(summary)
@@ -51,7 +48,6 @@ export default function Home() {
       localStorage.setItem(
         link,
         JSON.stringify({
-          // fullResult: data.fullResult,
           transcription: data.transcription,
           summary: data.summary,
         })
@@ -74,76 +70,78 @@ export default function Home() {
   }
 
   return (
-    <Wrapper >
+    <Wrapper>
       <LeftSide>
-      <Input
-        value={link}
-        onChange={handleLink}
-      placeholder="Please enter youtube video link"
-      />
-      <Button onClick={handleTranscribe} disabled={isLoading}>
-        {isLoading ? 'Transcribing...' : 'Transcribe'}
-      </Button>
-      {errorMessage && <ErrorText style={{ color: 'red' }}>{errorMessage}</ErrorText>}
+        <Input
+          value={link}
+          onChange={handleLink}
+          placeholder="Please enter youtube video link"
+        />
+        <Button onClick={handleTranscribe} disabled={isLoading}>
+          {isLoading ? 'Transcribing...' : 'Transcribe'}
+        </Button>
+        {errorMessage && (
+          <ErrorText style={{ color: 'red' }}>{errorMessage}</ErrorText>
+        )}
       </LeftSide>
 
       <RightSide>
-      {transcription && <Text>Transcription: {transcription}</Text>}
-      {summary && <Text>Summary: {summary}</Text>}
+        {transcription && <Text>Transcription: {transcription}</Text>}
+        {summary && <Text>Summary: {summary}</Text>}
       </RightSide>
     </Wrapper>
   )
 }
 
 const ErrorText = styled.p`
-  color: red; 
-  margin-top: 10px; 
-  font-size: 14px; 
+  color: red;
+  margin-top: 10px;
+  font-size: 14px;
 `
 const Text = styled.p`
-  color: white; 
-  margin-bottom: 40px; 
+  color: white;
+  margin-bottom: 40px;
 `
 
 const Wrapper = styled.main`
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
-  border: 1px solid white; 
-  border-radius: 10px; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid white;
+  border-radius: 10px;
   margin: 20px 40px;
 `
 
 const LeftSide = styled.div`
-  min-height: 300px; 
-  padding: 10px 10px 10px 20px; 
-  display: flex; 
-  flex-direction: column; 
-  align-items: center; 
-  justify-content: center; 
-  width: 50%; 
-  `
-  const Input = styled.input`
-  margin-bottom: 20px; 
-  border: 1px solid white; 
-  border-radius: 6px; 
-  padding: 5px 10px; 
-  width: 100%; 
-  `
-
+  min-height: 300px;
+  padding: 10px 10px 10px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+`
 
 const RightSide = styled.div`
-  min-height: 300px; 
+  min-height: 300px;
   max-height: 75vh;
-  overflow-y: auto; 
-  width: 100% ;
-  padding: 10px 20px 10px 10px; 
+  overflow-y: auto;
+  width: 100%;
+  padding: 10px 20px 10px 10px;
 `
 
 const Button = styled.button`
-  background: greenyellow; 
-  color: black; 
-  max-width: fit-content; 
-  padding: 10px; 
-  border-radius: 4px; 
+  background: greenyellow;
+  color: black;
+  max-width: fit-content;
+  padding: 10px;
+  border-radius: 4px;
+`
+
+const Input = styled.input`
+  margin-bottom: 20px;
+  border: 1px solid white;
+  border-radius: 6px;
+  padding: 5px 10px;
+  width: 100%;
 `

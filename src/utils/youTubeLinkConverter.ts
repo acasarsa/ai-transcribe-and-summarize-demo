@@ -1,9 +1,8 @@
 'use server'
 const YoutubeMp3Downloader = require('youtube-mp3-downloader')
-const ffmpeg = require('ffmpeg-static')
+import ffmpeg from 'ffmpeg-static'
 
 const youtubeLinkConverter = (url: string): Promise<string> => {
-
   return new Promise((resolve, reject) => {
     const YD = new YoutubeMp3Downloader({
       ffmpegPath: ffmpeg,
@@ -16,7 +15,7 @@ const youtubeLinkConverter = (url: string): Promise<string> => {
     YD.download(videoId)
 
     YD.on('progress', (data: any) => {
-      console.log(data.progress.percentage + '% downloaded');
+      console.log(data.progress.percentage + '% downloaded')
     })
 
     YD.on('finished', (err: any, video: any) => {
