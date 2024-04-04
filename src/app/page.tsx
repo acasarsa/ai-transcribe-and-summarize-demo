@@ -20,7 +20,20 @@ export default function Home() {
     setIsLoading(true) // Start loading
     setErrorMessage('') // Reset error message
 
+    // Step 1: Check cache
+    const cachedData = localStorage.getItem(link)
+
+    if (cachedData) {
+      const parsedData = JSON.parse(cachedData)
+      console.log('Retrieved cached data:', parsedData)
+      const { transcription, summary } = JSON.parse(cachedData)
+      setTranscription(transcription)
+      setSummary(summary)
+      setIsLoading(false)
+      return
+    }
     try {
+      // Step 2: Fetch data because it's not in the cache
       const response = await fetch('/api/transcribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -33,20 +46,30 @@ export default function Home() {
 
       const data = await response.json()
 
+      // Step 3: Store fetched data in cache
+      localStorage.setItem(
+        link,
+        JSON.stringify({
+          // fullResult: data.fullResult,
+          transcription: data.transcription,
+          summary: data.summary,
+        })
+      )
+
+      // Process and set the data
       if (data.error) {
         setErrorMessage(data.error)
       } else {
         setTranscription(data.transcription)
-        setSummary(data.summary.short)
+        setSummary(data.summary)
       }
     } catch (error) {
-      const errorMessage =
+      setErrorMessage(
         error instanceof Error ? error.message : 'An unexpected error occurred'
-      setErrorMessage(errorMessage)
+      )
     } finally {
       setIsLoading(false) // End loading
     }
-    // console.log(summary)
   }
 
   return (

@@ -6,6 +6,7 @@ interface TranscribeResponseData {
   transcription?: string
   summary?: string
   error?: string
+  fullResult?: any // for debugging purposes
 }
 
 export default async function handler(
@@ -52,8 +53,9 @@ export default async function handler(
     }
 
     res.status(200).json({
+      // fullResult: result, // for debugging purposes
       transcription: result.results.channels[0].alternatives[0].transcript,
-      summary: result.results.summary,
+      summary: result.results.summary.short,
     })
   } catch (error) {
     const unexpectedError =
