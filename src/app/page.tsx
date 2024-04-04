@@ -1,7 +1,8 @@
 'use client'
 import React, { useState } from 'react'
 
-const url = 'https://dpgr.am/spacewalk.wav'
+const url = 'https://youtube.com/shorts/_dVnTppFRz4?si=6YIhBWR2e_mVsrtG'
+// const url = 'https://youtube.com/shorts/5fgJfsc4UYo?si=o1rM_qePJb0rdld-'
 
 export default function Home() {
   const [link, setLink] = useState(url)
@@ -74,7 +75,11 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <input value={link} onChange={handleLink} style={{ color: 'red' }} />
+      <input
+        value={link}
+        onChange={handleLink}
+        style={{ color: 'red', width: '30%' }}
+      />
       <button onClick={handleTranscribe} disabled={isLoading}>
         {isLoading ? 'Transcribing...' : 'Transcribe'}
       </button>

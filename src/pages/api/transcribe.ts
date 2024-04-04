@@ -2,6 +2,9 @@ import { DeepgramApiError, createClient, isDeepgramError } from '@deepgram/sdk'
 import type { NextApiRequest, NextApiResponse } from 'next'
 require('dotenv').config()
 
+import youtubeLinkConverter from '@/utils/youTubeLinkConverter'
+import fs from 'fs'
+
 interface TranscribeResponseData {
   transcription?: string
   summary?: string
@@ -27,13 +30,18 @@ export default async function handler(
   }
 
   const deepgram = createClient(process.env.DEEPGRAM_API_KEY || '')
+  const videoFileName = await youtubeLinkConverter(url)
   try {
-    const { result, error } = await deepgram.listen.prerecorded.transcribeUrl(
-      { url },
+    const { result, error } = await deepgram.listen.prerecorded.transcribeFile(
+      // { url },
+      fs.createReadStream(videoFileName),
       {
         model: 'nova-2',
         smart_format: true,
         summarize: 'v2',
+        diarize: true,
+        paragraphs: true,
+        punctuation: true,
       }
     )
 
@@ -51,7 +59,7 @@ export default async function handler(
         return
       }
     }
-
+    // TRANSCRIPTION RESULTS
     res.status(200).json({
       // fullResult: result, // for debugging purposes
       transcription: result.results.channels[0].alternatives[0].transcript,
@@ -61,5 +69,12 @@ export default async function handler(
     const unexpectedError =
       error instanceof Error ? error.message : 'An unexpected error occurred'
     res.status(500).json({ error: unexpectedError })
+  } finally {
+    try {
+      fs.unlinkSync(videoFileName)
+      console.log(`Successfully deleted ${videoFileName}`)
+    } catch (deleteError) {
+      console.error(`Error deleting file ${videoFileName}: ${deleteError}`)
+    }
   }
 }
