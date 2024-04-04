@@ -2,6 +2,8 @@
 
 This project is an AI-powered transcriber designed to work with YouTube videos. It takes a YouTube link, downloads the audio, and uses the Deepgram API to transcribe and summarize the content. Built with TypeScript and Next.js, this tool is perfect for anyone looking to get quick transcriptions and summaries of video content.
 
+We recommend using a youtube short for demo purposes as transcription takes time comparable to the length of the audio. 
+
 ## Features
 
 - **YouTube Audio Transcription:** Input a YouTube video link, and get a full text transcription of the audio content.
