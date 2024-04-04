@@ -1,12 +1,11 @@
 'use client'
 import React, { useState } from 'react'
+import styled from 'styled-components'
 
 const url = 'https://youtube.com/shorts/_dVnTppFRz4?si=6YIhBWR2e_mVsrtG'
-// const url = 'https://youtube.com/shorts/5fgJfsc4UYo?si=o1rM_qePJb0rdld-'
 
 export default function Home() {
   const [link, setLink] = useState(url)
-  console.log('link:', link)
 
   const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
@@ -17,6 +16,7 @@ export default function Home() {
     setLink(event.target.value)
   }
 
+
   async function handleTranscribe() {
     setIsLoading(true) // Start loading
     setErrorMessage('') // Reset error message
@@ -25,8 +25,8 @@ export default function Home() {
     const cachedData = localStorage.getItem(link)
 
     if (cachedData) {
-      const parsedData = JSON.parse(cachedData)
-      console.log('Retrieved cached data:', parsedData)
+      // const parsedData = JSON.parse(cachedData)
+      // console.log('Retrieved cached data:', parsedData)
       const { transcription, summary } = JSON.parse(cachedData)
       setTranscription(transcription)
       setSummary(summary)
@@ -74,18 +74,76 @@ export default function Home() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <input
+    <Wrapper >
+      <LeftSide>
+      <Input
         value={link}
         onChange={handleLink}
-        style={{ color: 'red', width: '30%' }}
+      placeholder="Please enter youtube video link"
       />
-      <button onClick={handleTranscribe} disabled={isLoading}>
+      <Button onClick={handleTranscribe} disabled={isLoading}>
         {isLoading ? 'Transcribing...' : 'Transcribe'}
-      </button>
-      {errorMessage && <p style={{ color: 'red' }}>Error: {errorMessage}</p>}
-      {transcription && <p>Transcription: {transcription}</p>}
-      {summary && <p>Summary: {summary}</p>}
-    </main>
+      </Button>
+      {errorMessage && <ErrorText style={{ color: 'red' }}>{errorMessage}</ErrorText>}
+      </LeftSide>
+
+      <RightSide>
+      {transcription && <Text>Transcription: {transcription}</Text>}
+      {summary && <Text>Summary: {summary}</Text>}
+      </RightSide>
+    </Wrapper>
   )
 }
+
+const ErrorText = styled.p`
+  color: red; 
+  margin-top: 10px; 
+  font-size: 14px; 
+`
+const Text = styled.p`
+  color: white; 
+  margin-bottom: 40px; 
+`
+
+const Wrapper = styled.main`
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  border: 1px solid white; 
+  border-radius: 10px; 
+  margin: 20px 40px;
+`
+
+const LeftSide = styled.div`
+  min-height: 300px; 
+  padding: 10px 10px 10px 20px; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: center; 
+  width: 50%; 
+  `
+  const Input = styled.input`
+  margin-bottom: 20px; 
+  border: 1px solid white; 
+  border-radius: 6px; 
+  padding: 5px 10px; 
+  width: 100%; 
+  `
+
+
+const RightSide = styled.div`
+  min-height: 300px; 
+  max-height: 75vh;
+  overflow-y: auto; 
+  width: 100% ;
+  padding: 10px 20px 10px 10px; 
+`
+
+const Button = styled.button`
+  background: greenyellow; 
+  color: black; 
+  max-width: fit-content; 
+  padding: 10px; 
+  border-radius: 4px; 
+`
